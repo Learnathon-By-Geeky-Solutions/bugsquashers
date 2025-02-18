@@ -12,10 +12,6 @@ This project integrates Firebase Authentication with a Node.js & MongoDB backend
 ## Installation & Setup
 
 ### 1. Clone the Repository
-```sh
-git clone https://github.com/your-repo/firebase-mongo-auth.git
-cd firebase-mongo-auth
-```
 
 ### 2. Backend Setup
 
