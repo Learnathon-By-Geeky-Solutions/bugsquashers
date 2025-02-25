@@ -2,15 +2,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
+const User = require("./models/User"); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.disable("x-powered-by"); // Hide Express version
+app.disable("x-powered-by"); // Hiding the  Express version
 
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? ["https://your-production-domain.com"] // Add your actual production domain
+    ? ["https://your-production-domain.com"] 
     : ["http://localhost:3000", "http://localhost:5173"];
 
 app.use(
@@ -38,9 +39,9 @@ mongoose
   .catch((err) => console.error("Error connecting to MongoDB:", err.message));
 
 const validateUserInput = (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { fullName, email, uid } = req.body;
 
-  if (!username || !email || !password) {
+  if (!fullName || !email || !uid) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -54,15 +55,13 @@ const validateUserInput = (req, res, next) => {
 app.use("/api", userRoutes);
 
 app.post("/api/users", validateUserInput, async (req, res) => {
-  const { username, email } = req.body;
+  const { fullName, email, uid } = req.body;
 
   try {
-    const newUser = await mongoose.model("User").create({
-      username,
-      email,
-    });
+    const newUser = new User({ fullName, email, uid });
+    await newUser.save();
 
-    res.status(201).json(newUser);
+    res.status(201).json({ message: "User created successfully", user: newUser });
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Internal server error" });
