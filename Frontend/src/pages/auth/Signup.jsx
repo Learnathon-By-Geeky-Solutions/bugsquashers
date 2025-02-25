@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link ,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -7,23 +7,25 @@ import { Loader2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { auth } from "./Firebase";
-
+import { Label } from "../../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 
 function Signup() {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    role: "User",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const { fullName, email, password, confirmPassword } = formData;
+    const { fullName, email, password, confirmPassword, role } = formData;
 
     if (!fullName || !email || !password || !confirmPassword) {
       alert("Please fill in all fields");
@@ -45,11 +47,11 @@ function Signup() {
       );
       const user = userCredential.user;
 
-      // Send user data to the backend
+      // Send user data (including role) to the backend
       const response = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid: user.uid, fullName, email }),
+        body: JSON.stringify({ uid: user.uid, fullName, email, role }), // Include role here
       });
 
       const data = await response.json();
@@ -179,6 +181,29 @@ function Signup() {
                   onChange={handleChange}
                   disabled={isLoading}
                 />
+              </div>
+
+              {/* Role Selection */}
+              <div>
+                <Label htmlFor="role">Select Role</Label>
+                <div className="h-2 w-full"></div>
+                <Select
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, role: value })
+                  }
+                  disabled={isLoading}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Admin">Admin</SelectItem>
+                    <SelectItem value="User">User</SelectItem>
+                    <SelectItem value="Shopkeeper">Shopkeeper</SelectItem>
+                    <SelectItem value="Deliveryman">Deliveryman</SelectItem>
+                    <SelectItem value="Farmer">Farmer</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Submit Button */}

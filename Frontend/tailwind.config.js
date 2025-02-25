@@ -10,7 +10,8 @@ export default {
       colors: {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
+          foreground: 'hsl(var(--primary-foreground))',
+          hover: 'hsl(var(--primary-hover))'
         },
         background: {
           DEFAULT: 'hsl(var(--background))',
@@ -29,6 +30,7 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          hover: 'hsl(var(--secondary-hover))'
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',

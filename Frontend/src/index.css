@@ -7,11 +7,13 @@
     --background: 220, 2%, 2%; /* Darker background for more contrast */
     --foreground: 150, 10%, 95%; /* Brighter text */
 
-    --primary: 142, 45%, 45%; /* Much more vibrant green */
+    --primary: 133, 56%, 62%; /* Much more vibrant green */
     --primary-foreground: 142, 45%, 95%; /* Bright green-white */
+    --primary-hover:  133, 53%, 41%;
 
-    --secondary: 140, 15%, 25%; /* Richer green-tinted dark */
+    --secondary: 41, 91%, 63%; /* Richer green-tinted dark */
     --secondary-foreground: 140, 15%, 90%; /* Brighter green-tinted light */
+    --secondary-hover:  41, 87%, 45%;
 
     --muted: 140, 10%, 15%; /* Richer dark base */
     --muted-foreground: 142, 35%, 75%; /* Brighter muted green */
@@ -122,4 +124,15 @@
 .animate-gradient {
   background-size: 200% auto;
   animation: gradient 8s linear infinite;
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
