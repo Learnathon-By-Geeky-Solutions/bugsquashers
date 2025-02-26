@@ -10,6 +10,7 @@ router.post(
     body("uid").trim().isLength({ min: 1 }).escape(),
     body("fullName").trim().isLength({ min: 1 }).escape(),
     body("email").trim().isEmail().normalizeEmail(),
+    body("role").optional().isIn(["Admin", "User", "Shopkeeper", "Deliveryman", "Farmer"]) // Validate role
   ],
   async (req, res) => {
     try {
@@ -23,16 +24,17 @@ router.post(
       const uid = String(req.body.uid).trim();
       const fullName = String(req.body.fullName).trim();
       const email = String(req.body.email).trim();
+      const role = req.body.role || "User"; // Default role if not provided
 
-      // Securely query the database using sanitized input
+      // Check if user already exists
       const existingUser = await User.findOne({ $or: [{ uid }, { email }] });
 
       if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
       }
 
-      // Create a new user
-      const newUser = new User({ uid, fullName, email });
+      // Create a new user with role
+      const newUser = new User({ uid, fullName, email, role });
       await newUser.save();
 
       res.status(201).json({ message: "User created successfully", user: newUser });

@@ -7,7 +7,7 @@ const User = require("./models/User");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.disable("x-powered-by"); // Hiding the  Express version
+app.disable("x-powered-by"); // Hiding the Express version
 
 const allowedOrigins =
   process.env.NODE_ENV === "production"
@@ -54,11 +54,19 @@ const validateUserInput = (req, res, next) => {
 
 app.use("/api", userRoutes);
 
+// Signup Route (Handles Role)
 app.post("/api/users", validateUserInput, async (req, res) => {
-  const { fullName, email, uid } = req.body;
+  const { fullName, email, uid, role } = req.body;
 
   try {
-    const newUser = new User({ fullName, email, uid });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ $or: [{ uid }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    // Create a new user with role
+    const newUser = new User({ fullName, email, uid, role: role || "User" });
     await newUser.save();
 
     res.status(201).json({ message: "User created successfully", user: newUser });
