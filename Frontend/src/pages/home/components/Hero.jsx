@@ -58,8 +58,7 @@ function Hero() {
           {/* Welcome Badge */}
           <motion.div className="mb-2 md:mb-8" variants={itemVariants}>
             <div className="inline-flex items-center py-1.5 text-sm text-foreground backdrop-blur-sm">
-              <span>Welcome to FairBasket</span>{" "}
-              <span className="ml-2">🤖</span>
+              Welcome to FairBasket
             </div>
           </motion.div>
 
@@ -81,7 +80,7 @@ function Hero() {
             variants={itemVariants}
           >
             <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
-              Start Now <span className="ml-2">📊</span>
+              Get started 
             </button>
             <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full  bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary-hover">
               Learn More
@@ -100,9 +99,9 @@ function Hero() {
             ].map((stat) => (
               <div
                 key={stat.label} // Use label as a unique key instead of index
-                className="transform hover:scale-105 transition-all duration-300 p-4 rounded-xl border border-primary/20 bg-background/50 backdrop-blur-sm"
+                className=" p-4 rounded-2xl border border-primary"
               >
-                <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <div className="text-3xl sm:text-4xl font-bold bg-primary bg-clip-text text-transparent">
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">
