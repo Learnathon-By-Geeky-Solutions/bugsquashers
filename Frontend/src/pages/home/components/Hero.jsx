@@ -6,9 +6,12 @@ import HeroAnimation from "../assets/HeroAnimation"; // Import the Lottie JSON f
 
 function Hero() {
   const [mounted, setMounted] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    // Check if dark mode is enabled
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
   }, []);
 
   if (!mounted) return null;
@@ -40,11 +43,16 @@ function Hero() {
 
   return (
     <motion.div
-      className="relative min-h-screen overflow-hidden bg-background pt-16 md:pt-28 -mt-2"
+      className="relative min-h-screen overflow-hidden bg-background pt-0 md:pt-28 -mt-2"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
+      {/* Gradient Background (Transparent in Light Mode, Visible in Dark Mode) */}
+      <div
+        className="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-primary via-background to-background dark:from-primary dark:via-background dark:to-background opacity-0 dark:opacity-20"
+        aria-hidden="true"
+      />
 
       <motion.div
         className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-32 gap-8 lg:gap-12"
@@ -52,7 +60,7 @@ function Hero() {
       >
         {/* Left Content */}
         <motion.div
-          className="relative z-10 max-w-2xl text-left mt-10 lg:mt-0 lg:flex-1 order-2 lg:order-1"
+          className="relative z-10 max-w-2xl text-left mt-80 sm:mt-96 md:mt-0  lg:mt-0 lg:flex-1 order-2 lg:order-1"
           variants={containerVariants}
         >
           {/* Welcome Badge */}
@@ -67,7 +75,7 @@ function Hero() {
             <SplitText />
           </div>
           <motion.p
-            className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground backdrop-blur-sm"
+            className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground hidden md:flex"
             variants={itemVariants}
           >
             Use AI-driven scanning to identify products, compare today's prices,
@@ -79,10 +87,10 @@ function Hero() {
             className="mt-8 flex flex-col sm:flex-row items-center gap-4"
             variants={itemVariants}
           >
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
-              Get started 
+            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium shadow-md text-primary-foreground hover:bg-primary-hover">
+              Get started
             </button>
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full  bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary-hover">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center shadow-md rounded-full  bg-secondary px-6 py-3 text-sm font-medium text-secondary-foreground hover:bg-secondary-hover">
               Learn More
             </button>
           </motion.div>
@@ -114,7 +122,7 @@ function Hero() {
 
         {/* Right Side - Lottie Animation */}
         <motion.div
-          className="flex justify-center md:justify-end items-center h-[250px] sm:h-[500px] lg:h-[600px] w-full lg:w-1/2 z-10 mt-10 lg:mt-0 order-1 lg:order-2"
+          className="flex justify-center md:justify-end items-center h-[400px] sm:h-[500px] lg:h-[600px] w-full lg:w-1/2 z-10 -mt-6 lg:mt-0 order-1 lg:order-2 absolute md:relative"
           variants={itemVariants}
         >
           <Lottie

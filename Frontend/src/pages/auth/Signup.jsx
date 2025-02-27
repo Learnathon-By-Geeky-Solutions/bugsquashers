@@ -10,6 +10,8 @@ import { auth } from "./Firebase";
 import { Label } from "../../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 
+import Lottie from "react-lottie-player";
+import welcomeback from "./assets/savetime";
 function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,17 +84,17 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen flex">
       {/* Left Column - Cover Image */}
-      <div
-        className="hidden lg:block w-1/2 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1656832020447-bc9446b5028a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-        }}
-      >
-        <div className="h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-4xl font-bold text-white">Join Us!</h1>
+      <div className="hidden lg:block w-1/2 bg-muted items-center justify-center overflow-hidden pt-28">
+        <Lottie
+          loop
+          animationData={welcomeback}
+          play
+          className="w-full h-[70%]"
+        />
+        <div className="text-3xl text-primary flex items-center justify-center font-praise">
+          <h1>Save time and money by signing up!</h1>
         </div>
       </div>
 
