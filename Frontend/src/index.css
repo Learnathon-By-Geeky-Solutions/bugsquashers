@@ -4,30 +4,74 @@
 
 @layer base {
   :root {
-    --background: 220, 2%, 2%; /* Darker background for more contrast */
-    --foreground: 150, 10%, 95%; /* Brighter text */
+    --background: 0, 0%, 100%; /* White */
+    --foreground: 150, 10%, 5%; /* Dark gray-green for text */
 
-    --primary: 133, 56%, 62%; /* Much more vibrant green */
-    --primary-foreground: 142, 45%, 95%; /* Bright green-white */
-    --primary-hover:  133, 53%, 41%;
+    --primary: 133, 56%, 62%; /* Bright green (unchanged) */
+    --primary-foreground: 142, 45%, 100%; /* White for text on primary */
+    --primary-hover: 133, 53%, 41%; /* Darker green for hover */
 
-    --secondary: 41, 91%, 63%; /* Richer green-tinted dark */
-    --secondary-foreground: 140, 15%, 90%; /* Brighter green-tinted light */
-    --secondary-hover:  41, 87%, 45%;
+    --secondary: 41, 91%, 53%; /* Bright yellow (unchanged) */
+    --secondary-foreground: 142, 45%, 100%; /* White for text on secondary */
+    --secondary-hover: 41, 87%, 45%; /* Darker yellow for hover */
 
-    --muted: 140, 10%, 15%; /* Richer dark base */
-    --muted-foreground: 142, 35%, 75%; /* Brighter muted green */
+    --muted: 210, 0%, 96%; /* Light gray (unchanged) */
+    --muted-foreground: 210, 0%, 45%; /* Medium gray for muted text */
 
-    --accent: 80, 65%, 55%; /* Yellow-green accent */
-    --accent-foreground: 80, 65%, 95%; /* Bright yellow-green white */
+    --accent: 45, 69%, 50%; /* Gold for accents */
+    --accent-foreground: 80, 65%, 95%; /* Light gray-green for text on accent */
 
-    --destructive: 0, 85%, 45%; /* More intense red */
-    --destructive-foreground: 0, 0%, 100%; /* Pure white */
+    --destructive: 0, 85%, 45%; /* Red for destructive actions */
+    --destructive-foreground: 0, 0%, 100%; /* White for text on destructive */
 
-    --border: 140, 15%, 30%; /* More visible green-tinted border */
-    --input: 140, 15%, 30%; /* Matching input */
-    --ring: 142, 45%, 45%; /* Matching vibrant primary */
+    --border: 210, 0%, 85%; /* Light gray for borders */
+    --input: 210, 0%, 85%; /* Light gray for input fields */
+    --ring: 41, 91%, 53%; /* secondary color for focus rings */
+    --radius: 0.5rem; /* Border radius */
+
+    --card: 0, 0%, 98%; /* Light gray for cards */
+    --card-foreground: 150, 10%, 5%; /* Dark gray-green for card text */
+
+    --chart-1: 197, 83%, 54%; /* Bright blue */
+    --chart-2: 141, 71%, 48%; /* Bright green */
+    --chart-3: 41, 87%, 45%; /* Dark yellow */
+    --chart-4: 19, 84%, 54%; /* Orange */
+    --chart-5: 355, 84%, 57%; /* Bright red */
+}
+.dark {
+    --background: 240, 100%, 1%; 
+    --foreground: 150, 10%, 95%; 
+
+    --primary: 133, 53%, 41%; 
+    --primary-foreground: 142, 45%, 95%; 
+    --primary-hover:  133, 66%, 28%;
+
+    --secondary: 41, 87%, 45%; 
+    --secondary-foreground: 140, 15%, 90%; 
+    --secondary-hover:  45, 83%, 37%;
+
+    --muted: 45, 47%, 10%; 
+    --muted-foreground: 233, 33%, 95%; 
+
+    --accent: 45, 69%, 50%; 
+    --accent-foreground: 80, 65%, 95%; 
+
+    --destructive: 0, 85%, 45%; 
+    --destructive-foreground: 0, 0%, 100%; 
+
+    --border: 41, 87%, 45%; 
+    --input: 41, 87%, 45%; 
+    --ring: 41, 87%, 45%; 
     --radius: 0.5rem;
+
+    --card: 240, 34%, 7%; 
+    --card-foreground: 220, 14%, 95%;
+
+    --chart-1: 197, 83%, 54%;
+    --chart-2: 141, 71%, 48%;
+    --chart-3: 41, 87%, 45%;
+    --chart-4: 19, 84%, 54%;
+    --chart-5: 355, 84%, 57%;
 }
 }
 
