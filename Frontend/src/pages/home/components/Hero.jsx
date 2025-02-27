@@ -6,12 +6,9 @@ import HeroAnimation from "../assets/HeroAnimation"; // Import the Lottie JSON f
 
 function Hero() {
   const [mounted, setMounted] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Check if dark mode is enabled
-    setIsDarkMode(document.documentElement.classList.contains("dark"));
   }, []);
 
   if (!mounted) return null;
