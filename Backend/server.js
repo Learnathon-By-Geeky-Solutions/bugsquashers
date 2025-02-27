@@ -91,7 +91,7 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-// NEW: Fetch user role by UID
+// NEW: Fetch user role by UID (this api for router )
 app.get("/api/user/:uid", async (req, res) => {
   try {
     const uid = req.params.uid;
