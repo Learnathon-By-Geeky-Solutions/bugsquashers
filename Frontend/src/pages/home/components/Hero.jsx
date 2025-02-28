@@ -27,23 +27,24 @@ function Hero() {
     fetchUserCount();
   }, []);
 
-  // Animate the user count from 0 to the target value
+  // Animate the user count smoothly
   const animateUsers = (target) => {
-    let start = 0;
-    const increment = Math.ceil(target / 100); // Adjust for smoother animation
-    const duration = 2000; // Animation duration in ms
-    const steps = Math.ceil(duration / 50); // Update every 50ms
-    const stepValue = Math.ceil(target / steps);
+    const startTime = performance.now();
+    const duration = 1000; // 2 seconds
 
-    const interval = setInterval(() => {
-      start += stepValue;
-      if (start >= target) {
-        setActiveUsers(target);
-        clearInterval(interval);
-      } else {
-        setActiveUsers(start);
+    const update = (timestamp) => {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1); // Ensure it stops at 100%
+      const animatedValue = Math.floor(progress * target);
+
+      setActiveUsers(animatedValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
       }
-    }, 50);
+    };
+
+    requestAnimationFrame(update);
   };
 
   if (!mounted) return null;
@@ -72,14 +73,18 @@ function Hero() {
       animate="visible"
       variants={containerVariants}
     >
-
+      {/* Gradient Background (Transparent in Light Mode, Visible in Dark Mode) */}
+      <div
+        className="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-primary via-background to-background dark:from-primary dark:via-background dark:to-background opacity-0 dark:opacity-20"
+        aria-hidden="true"
+      />
       <motion.div
         className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-32 gap-8 lg:gap-12"
         variants={containerVariants}
       >
         {/* Left Content */}
         <motion.div
-          className="relative z-10 max-w-2xl text-left mt-80 sm:mt-96 md:mt-0  lg:mt-0 lg:flex-1 order-2 lg:order-1"
+          className="relative z-10 max-w-2xl text-left mt-80 sm:mt-96 md:mt-0 lg:mt-0 lg:flex-1 order-2 lg:order-1"
           variants={containerVariants}
         >
           <motion.div className="mb-2 md:mb-8" variants={itemVariants}>
@@ -106,7 +111,7 @@ function Hero() {
             <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
               Get started 
             </button>
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full  bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary-hover">
+            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary-hover">
               Learn More
             </button>
           </motion.div>

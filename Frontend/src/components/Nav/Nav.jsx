@@ -1,13 +1,11 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { onAuthStateChanged, signOut } from "firebase/auth"
-import { auth } from "../../pages/auth/Firebase"
-import { ShoppingCart, Menu, Search, Camera, User, Moon, Sun } from "lucide-react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../pages/auth/Firebase";
+import { ShoppingCart, Menu, Search, Camera, User, Moon, Sun } from "lucide-react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,29 +13,29 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "../ui/navigation-menu"
+} from "../ui/navigation-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import PropTypes from "prop-types"
-
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import PropTypes from "prop-types";
+import { useAuth } from "../../pages/auth/Authcontext"; // Adjust the path
 // ThemeToggle component to switch between dark and light mode
 const ThemeToggle = ({ showText = false }) => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light")
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     if (theme === "dark") {
-      document.documentElement.classList.add("dark")
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark")
+      document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("theme", theme)
-  }, [theme])
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   return (
     <button
@@ -47,15 +45,15 @@ const ThemeToggle = ({ showText = false }) => {
       {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
       {showText && <span>{theme === "light" ? "Dark" : "Light"}</span>}
     </button>
-  )
-}
+  );
+};
 
 ThemeToggle.propTypes = {
   showText: PropTypes.bool,
-}
+};
 
 // MobileNavigation component for smaller screens
-const MobileNavigation = ({ user, search, setSearch, navigate, handleLogout }) => {
+const MobileNavigation = ({ user, search, setSearch, navigate, handleLogout, handleDashboardClick, loading }) => {
   return (
     <div className="lg:hidden flex items-center space-x-4">
       <Button variant="outline" size="icon" aria-label="Camera">
@@ -97,8 +95,13 @@ const MobileNavigation = ({ user, search, setSearch, navigate, handleLogout }) =
               </Button>
               {user ? (
                 <>
-                  <Button onClick={() => navigate("/customerdash")} variant="outline" className="w-full mb-2">
-                    Dashboard
+                  <Button
+                    onClick={handleDashboardClick}
+                    variant="outline"
+                    className="w-full mb-2"
+                    disabled={loading} // Disable button while loading
+                  >
+                    {loading ? "Loading..." : "Dashboard"}
                   </Button>
                   <Button onClick={handleLogout} variant="destructive" className="w-full">
                     Log out
@@ -114,8 +117,8 @@ const MobileNavigation = ({ user, search, setSearch, navigate, handleLogout }) =
         </SheetContent>
       </Sheet>
     </div>
-  )
-}
+  );
+};
 
 MobileNavigation.propTypes = {
   user: PropTypes.object,
@@ -123,10 +126,12 @@ MobileNavigation.propTypes = {
   setSearch: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
   handleLogout: PropTypes.func.isRequired,
-}
+  handleDashboardClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
 
 // DesktopNavigation component for larger screens
-const DesktopNavigation = ({ user, search, setSearch, navigate, handleLogout }) => {
+const DesktopNavigation = ({ user, search, setSearch, navigate, handleLogout, handleDashboardClick, loading }) => {
   return (
     <div className="hidden lg:flex justify-between items-center space-x-6 text-muted-foreground">
       <div>
@@ -209,7 +214,9 @@ const DesktopNavigation = ({ user, search, setSearch, navigate, handleLogout }) 
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 bg-muted" align="end" forceMount>
-            <DropdownMenuItem onClick={() => navigate("/customerdash")}>Dashboard</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDashboardClick} disabled={loading}>
+              {loading ? "Loading..." : "Dashboard"}
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate("/profile")}>Profile</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
@@ -221,8 +228,8 @@ const DesktopNavigation = ({ user, search, setSearch, navigate, handleLogout }) 
         </Button>
       )}
     </div>
-  )
-}
+  );
+};
 
 DesktopNavigation.propTypes = {
   user: PropTypes.object,
@@ -230,28 +237,55 @@ DesktopNavigation.propTypes = {
   setSearch: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
   handleLogout: PropTypes.func.isRequired,
-}
+  handleDashboardClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
 
 // Main Nav component
 const Nav = () => {
-  const [user, setUser] = useState(null)
-  const [search, setSearch] = useState("")
-  const navigate = useNavigate()
-
-  // Track user authentication state
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser)
-    return () => unsubscribe()
-  }, [])
-
+  const { user, userRole, loading } = useAuth(); // Get userRole from AuthContext
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      navigate("/login")
+      await signOut(auth);
+      navigate("/login");
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Error signing out:", error);
     }
-  }
+  };
+
+  const handleDashboardClick = () => {
+    if (loading) {
+      console.log("Loading user role...");
+      return; // Prevent navigation if still loading
+    }
+
+    if (userRole) {
+      switch (userRole) {
+        case "Admin":
+          navigate("/admin");
+          break;
+        case "User":
+          navigate("/customerdash");
+          break;
+        case "Shopkeeper":
+          navigate("/retailer");
+          break;
+        case "Deliveryman":
+          navigate("/deliverydash");
+          break;
+        case "Farmer":
+          navigate("/farmerdash");
+          break;
+        default:
+          navigate("/");
+      }
+    } else {
+      navigate("/login"); // Fallback to login if no role is set
+    }
+  };
+
 
   return (
     <nav className="fixed top-0 w-full py-4 px-4 md:px-8 lg:px-32 flex items-center justify-between z-50 bg-background/80 backdrop-blur-md">
@@ -267,6 +301,8 @@ const Nav = () => {
         setSearch={setSearch}
         navigate={navigate}
         handleLogout={handleLogout}
+        handleDashboardClick={handleDashboardClick}
+        loading={loading}
       />
 
       {/* Mobile Navigation */}
@@ -276,9 +312,11 @@ const Nav = () => {
         setSearch={setSearch}
         navigate={navigate}
         handleLogout={handleLogout}
+        handleDashboardClick={handleDashboardClick}
+        loading={loading}
       />
     </nav>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;

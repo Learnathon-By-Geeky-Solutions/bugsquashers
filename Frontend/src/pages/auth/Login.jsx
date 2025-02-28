@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom"; // Import useLocation
 import { useForm, FormProvider } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
@@ -16,11 +16,13 @@ import { Input } from "../../components/ui/input";
 import { auth } from "./Firebase";
 import Lottie from "react-lottie-player";
 import welcomeback from "./assets/welcomeback";
+
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
   const formMethods = useForm();
-
+  
   const { handleSubmit } = formMethods;
 
   async function onSubmit(data) {
@@ -41,7 +43,10 @@ export function LoginForm() {
       );
       console.log("User logged in:", userCredential.user);
       alert("Login successful!");
-      navigate("/");
+
+      // Redirect to the intended destination or home page
+      const intendedDestination = location.state?.from || "/";
+      navigate(intendedDestination);
     } catch (error) {
       console.error("Login error:", error);
       alert("Invalid email or password");

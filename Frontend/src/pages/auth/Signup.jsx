@@ -9,9 +9,10 @@ import { Input } from "../../components/ui/input";
 import { auth } from "./Firebase";
 import { Label } from "../../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
-
 import Lottie from "react-lottie-player";
 import welcomeback from "./assets/savetime";
+import { useAuth } from "./AuthContext"; // Import useAuth
+
 function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,8 @@ function Signup() {
     confirmPassword: "",
     role: "User",
   });
+
+  const { setUser, setUserRole } = useAuth(); // Access setUser and setUserRole from AuthContext
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +45,7 @@ function Signup() {
     }
 
     try {
+      // Step 1: Sign up the user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -49,7 +53,11 @@ function Signup() {
       );
       const user = userCredential.user;
 
-      // Send user data (including role) to the backend
+      // Step 2: Update AuthContext with the new user and role
+      setUser(user); // Update user in AuthContext
+      setUserRole(role); // Update userRole in AuthContext
+
+      // Step 3: Send user data (including role) to the backend
       const response = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,7 +67,27 @@ function Signup() {
       const data = await response.json();
       if (response.ok) {
         alert("Account created successfully!");
-        navigate("/"); // Redirect to home page after successful sign-up
+
+        // Step 4: Redirect based on role
+        switch (role) {
+          case "Admin":
+            navigate("/admin");
+            break;
+          case "User":
+            navigate("/customerdash");
+            break;
+          case "Shopkeeper":
+            navigate("/retailer");
+            break;
+          case "Deliveryman":
+            navigate("/deliverydash");
+            break;
+          case "Farmer":
+            navigate("/farmerdash");
+            break;
+          default:
+            navigate("/");
+        }
       } else {
         alert(data.message || "Error creating account");
       }
