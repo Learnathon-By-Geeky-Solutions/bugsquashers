@@ -23,7 +23,6 @@ import { Label } from "../../components/ui/label";
 import { Package, CreditCard, MapPin, User } from "lucide-react";
 import RecentOrders from "./components/RecentOrder";
 import SavedAddresses from "./components/SavedAddresses";
-import Nav from "../../components/Nav/Nav";
 
 const DashboardCard = ({ title, value, description, icon }) => (
   <Card>
@@ -82,7 +81,6 @@ const AccountOverview = () => (
 const CustomerDashboard = () => {
   return (
     <div>
-      <Nav />
       <div className="container mx-auto px-4 py-4 space-y-6 pt-20">
         <h1 className="text-3xl font-bold">Customer Dashboard</h1>
 

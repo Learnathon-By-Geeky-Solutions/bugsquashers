@@ -24,6 +24,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import PropTypes from "prop-types";
 import { useAuth } from "../../pages/auth/Authcontext"; // Adjust the path
+
 // ThemeToggle component to switch between dark and light mode
 const ThemeToggle = ({ showText = false }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -243,7 +244,7 @@ DesktopNavigation.propTypes = {
 
 // Main Nav component
 const Nav = () => {
-  const { user, userRole, loading } = useAuth(); // Get userRole from AuthContext
+  const { user, loading } = useAuth(); // Get userRole from AuthContext
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -256,39 +257,14 @@ const Nav = () => {
   };
 
   const handleDashboardClick = () => {
-    if (loading) {
-      console.log("Loading user role...");
-      return; // Prevent navigation if still loading
-    }
-
-    if (userRole) {
-      switch (userRole) {
-        case "Admin":
-          navigate("/admin");
-          break;
-        case "User":
-          navigate("/customerdash");
-          break;
-        case "Shopkeeper":
-          navigate("/retailer");
-          break;
-        case "Deliveryman":
-          navigate("/deliverydash");
-          break;
-        case "Farmer":
-          navigate("/farmerdash");
-          break;
-        default:
-          navigate("/");
-      }
-    } else {
-      navigate("/login"); // Fallback to login if no role is set
-    }
+    navigate("/dashboard");
   };
+  
 
 
   return (
     <nav className="fixed top-0 w-full py-4 px-4 md:px-8 lg:px-32 flex items-center justify-between z-50 bg-background/80 backdrop-blur-md">
+      
       {/* Logo */}
       <h1 className="text-3xl font-black text-muted-foreground">
         FAIRBASKET<span className="text-primary">.</span>

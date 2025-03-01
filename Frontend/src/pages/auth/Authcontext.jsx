@@ -1,50 +1,63 @@
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import { auth } from "./Firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./Firebase"; // Adjust the path
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from 'prop-types';
 
+// Create AuthContext
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userRole, setUserRole] = useState(null); // Add userRole state
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
 
-      if (user) {
-        try {
-          // Fetch user role from your backend or Firebase
-          const response = await fetch(`http://localhost:5000/api/user/${user.uid}`);
-          const data = await response.json();
-          setUserRole(data.role); // Set the user's role
-        } catch (error) {
-          console.error("Error fetching user role:", error);
-        }
+        // Fetch user role from Firestore or backend if needed
+        fetchUserRole(currentUser.uid);
       } else {
-        setUserRole(null); // Reset role if no user is logged in
+        setUser(null);
+        setUserRole(null);
       }
-
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Memoize the value object to prevent unnecessary re-renders
-  const value = useMemo(() => ({ user, userRole, loading }), [user, userRole, loading]);
+  // Example function to fetch user role
+  const fetchUserRole = async (uid) => {
+    try {
+      // Replace this with actual Firestore or API call
+      const role = "User"; // Fetch role from Firestore based on UID
+      setUserRole(role);
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+    }
+  };
+
+  // Use useMemo to stabilize the context value
+  const contextValue = useMemo(
+    () => ({ user, setUser, userRole, setUserRole, loading }),
+    [user, userRole, loading]
+  );
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Add prop validation for children
 AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children prop
+  children: PropTypes.node.isRequired,
 };
 
-export const useAuth = () => useContext(AuthContext);
+// Custom Hook
+export const useAuth = () => {
+  return useContext(AuthContext);
+};

@@ -67,30 +67,11 @@ function Signup() {
       const data = await response.json();
       if (response.ok) {
         alert("Account created successfully!");
-
-        // Step 4: Redirect based on role
-        switch (role) {
-          case "Admin":
-            navigate("/admin");
-            break;
-          case "User":
-            navigate("/customerdash");
-            break;
-          case "Shopkeeper":
-            navigate("/retailer");
-            break;
-          case "Deliveryman":
-            navigate("/deliverydash");
-            break;
-          case "Farmer":
-            navigate("/farmerdash");
-            break;
-          default:
-            navigate("/");
-        }
+        navigate("/"); // Redirect to home page
       } else {
         alert(data.message || "Error creating account");
       }
+      
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Email is already in use. Please use a different email.");

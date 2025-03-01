@@ -74,7 +74,6 @@ const faqs = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Nav />
       <Hero />
       <Bento />
 
