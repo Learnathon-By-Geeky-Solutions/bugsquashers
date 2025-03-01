@@ -1,5 +1,4 @@
 import Hero from "./components/Hero";
-import Nav from "../../components/Nav/Nav";
 import Bento from "./components/Bento";
 import Footer from "./components/Footer";
 import { motion } from "framer-motion";
