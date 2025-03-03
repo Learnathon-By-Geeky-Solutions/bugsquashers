@@ -136,12 +136,12 @@ const DesktopNavigation = ({ user, search, setSearch, navigate, handleLogout, ha
   return (
     <div className="hidden lg:flex justify-between items-center space-x-6 text-muted-foreground">
       <div>
-        <a className="hover:text-accent" href="./">
+        <a className="hover:text-accent" href="/">
           Home
         </a>
       </div>
       <div>
-        <a className="hover:text-accent" href="./">
+        <a className="hover:text-accent" href="/market">
           Market
         </a>
       </div>
@@ -257,13 +257,14 @@ const Nav = () => {
   };
 
   const handleDashboardClick = () => {
+    console.log("User Role:", user?.role || "No role assigned"); 
     navigate("/dashboard");
   };
   
 
 
   return (
-    <nav className="fixed top-0 w-full py-4 px-4 md:px-8 lg:px-32 flex items-center justify-between z-50 bg-background/80 backdrop-blur-md">
+    <nav className="fixed top-0 w-full py-4 px-4 md:px-8 lg:px-32 flex items-center justify-between z-50 bg-background dark:bg-background/80 backdrop-blur-md shadow-md dark:shadow-none">
       
       {/* Logo */}
       <h1 className="text-3xl font-black text-muted-foreground">

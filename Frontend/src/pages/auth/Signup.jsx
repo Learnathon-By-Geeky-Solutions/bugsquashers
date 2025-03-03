@@ -6,12 +6,19 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Loader2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { auth } from "./Firebase";
+import { auth, db } from "./Firebase";
 import { Label } from "../../components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
 import Lottie from "react-lottie-player";
 import welcomeback from "./assets/savetime";
 import { useAuth } from "./AuthContext"; // Import useAuth
+import { setDoc, doc } from "firebase/firestore";
 
 function Signup() {
   const navigate = useNavigate();
@@ -53,7 +60,13 @@ function Signup() {
       );
       const user = userCredential.user;
 
-      // Step 2: Update AuthContext with the new user and role
+      // Step 2: Store user data in Firebase Firestore and Update AuthContext with the new user and role
+      await setDoc(doc(db, "users", user.uid), {
+        fullName,
+        email,
+        role,
+        createdAt: new Date(),
+      });
       setUser(user); // Update user in AuthContext
       setUserRole(role); // Update userRole in AuthContext
 
@@ -71,7 +84,6 @@ function Signup() {
       } else {
         alert(data.message || "Error creating account");
       }
-      
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Email is already in use. Please use a different email.");

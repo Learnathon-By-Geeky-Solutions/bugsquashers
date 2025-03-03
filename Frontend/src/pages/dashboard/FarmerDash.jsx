@@ -2,7 +2,7 @@ import React from 'react'
 
 function FarmerDash() {
   return (
-    <div>FarmerDash</div>
+    <div><h1 className='text-4xl pt-72'>Farmerdashboard</h1></div>
   )
 }
 

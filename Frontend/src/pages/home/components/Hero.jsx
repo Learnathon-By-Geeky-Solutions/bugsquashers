@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import Lottie from "react-lottie-player";
 import SplitText from "./SplitText/SplitText";
 import HeroAnimation from "../assets/HeroAnimation";
-
+import { ArrowRight } from "lucide-react";
+import { Button } from "../../../components/ui/button";
 function Hero() {
   const [mounted, setMounted] = useState(false);
   const [activeUsers, setActiveUsers] = useState(0); // State for active users
@@ -53,7 +54,11 @@ function Hero() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.2, duration: 0.8, ease: [0.42, 0, 0.58, 1] },
+      transition: {
+        staggerChildren: 0.2,
+        duration: 0.8,
+        ease: [0.42, 0, 0.58, 1],
+      },
     },
   };
 
@@ -108,12 +113,18 @@ function Hero() {
             className="mt-8 flex flex-col sm:flex-row items-center gap-4"
             variants={itemVariants}
           >
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
-              Get started 
-            </button>
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary-hover">
+            <Button
+              size="sm"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48"
+            >
+              Get Started
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"  />
+            </Button>
+            <Button 
+            size="sm"
+            className="bg-secondary text-primary-foreground hover:bg-secondary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48">
               Learn More
-            </button>
+            </Button>
           </motion.div>
 
           {/* Stats */}
@@ -122,7 +133,10 @@ function Hero() {
             variants={containerVariants}
           >
             {[
-              { value: `${activeUsers.toLocaleString()}+`, label: "Active Users" }, // Dynamic value
+              {
+                value: `${activeUsers.toLocaleString()}+`,
+                label: "Active Users",
+              }, // Dynamic value
               { value: "50,000+", label: "Registered Shops" },
               { value: "20,000+", label: "Delivery Agents" },
             ].map((stat) => (

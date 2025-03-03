@@ -1,29 +1,29 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../pages/auth/Authcontext"; // Adjust the path
-import PropTypes from "prop-types"; // Import PropTypes
+import { useAuth } from "../pages/auth/Authcontext";
+import PropTypes from "prop-types";
 
-const ProtectedRoute = ({ children, requiredRole }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, userRole, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading spinner or skeleton
+    return <div>Loading...</div>; // Show loading indicator
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />; // Redirect to login if not authenticated
+    return <Navigate to="/login" replace />; // Redirect if not logged in
   }
 
-  if (requiredRole && userRole !== requiredRole) {
-    return <Navigate to="/" replace />; // Redirect to home if role doesn't match
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/404" replace />; // Redirect if role is unauthorized
   }
 
   return children;
 };
 
-// Add PropTypes validation
+// Prop validation
 ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children prop
-  requiredRole: PropTypes.string, // Validate requiredRole prop
+  children: PropTypes.node.isRequired,
+  allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ProtectedRoute;
