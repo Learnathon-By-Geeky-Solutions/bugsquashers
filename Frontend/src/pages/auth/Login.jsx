@@ -16,8 +16,6 @@ import { Input } from "../../components/ui/input";
 import { auth } from "./Firebase";
 import Lottie from "react-lottie-player";
 import welcomeback from "./assets/welcomeback";
-import { doc, getDoc } from "firebase/firestore"; 
-import { db } from "./Firebase"; // Import Firestore
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();

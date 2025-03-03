@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroui/drawer": "^2.2.12",
+    "@heroui/system": "^2.4.11",
+    "@heroui/theme": "^2.4.11",
     "@hookform/resolvers": "^4.0.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-avatar": "^1.1.3",

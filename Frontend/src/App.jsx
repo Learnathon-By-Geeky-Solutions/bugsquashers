@@ -12,6 +12,7 @@ import RetailerDash from "./pages/dashboard/RetailerDash";
 import DeliveryDash from "./pages/dashboard/DeliveryDash";
 import FarmerDash from "./pages/dashboard/FarmerDash";
 import NotFound from "./pages/NotFound";
+import Cart from "./pages/cart/Cart";
 
 const DashboardRedirect = () => {
   const { userRole } = useAuth();
@@ -71,6 +72,7 @@ const App = () => (
           <Route path="/retailer" element={<ProtectedRoute allowedRoles={["Shopkeeper"]}><RetailerDash /></ProtectedRoute>} />
           <Route path="/deliverydash" element={<ProtectedRoute allowedRoles={["Deliveryman"]}><DeliveryDash /></ProtectedRoute>} />
           <Route path="/farmerdash" element={<ProtectedRoute allowedRoles={["Farmer"]}><FarmerDash /></ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute allowedRoles={["User"]}><Cart/> </ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>

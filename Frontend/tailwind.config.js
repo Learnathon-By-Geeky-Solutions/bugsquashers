@@ -1,3 +1,4 @@
+const {heroui} = require('@heroui/theme');
 import animatePlugin from "tailwindcss-animate";
 
 export default {
@@ -5,6 +6,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/components/(drawer|modal).js"
   ],
   theme: {
     extend: {
@@ -117,5 +119,5 @@ export default {
       }
     }
   },
-  plugins: [animatePlugin],
+  plugins: [animatePlugin,heroui()],
 };
