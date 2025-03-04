@@ -5,37 +5,36 @@ import SplitText from "./SplitText/SplitText";
 import HeroAnimation from "../assets/HeroAnimation";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../../../components/ui/button";
+
 function Hero() {
   const [mounted, setMounted] = useState(false);
-  const [activeUsers, setActiveUsers] = useState(0); // State for active users
+  const [activeUsers, setActiveUsers] = useState(0);
 
-  // Fetch user count from the backend
   useEffect(() => {
     setMounted(true);
 
     const fetchUserCount = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users"); // Adjust URL if needed
+        const response = await fetch("http://localhost:5000/api/users");
         const users = await response.json();
-        const totalUsers = users.length; // Assuming the API returns an array of users
-        animateUsers(totalUsers); // Trigger animation
+        const totalUsers = users.length;
+        animateUsers(totalUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
-        animateUsers(500000); // Fallback to static value on error
+        animateUsers(500000); // Fallback
       }
     };
 
     fetchUserCount();
   }, []);
 
-  // Animate the user count smoothly
   const animateUsers = (target) => {
     const startTime = performance.now();
-    const duration = 1000; // 2 seconds
+    const duration = 1000;
 
     const update = (timestamp) => {
       const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1); // Ensure it stops at 100%
+      const progress = Math.min(elapsed / duration, 1);
       const animatedValue = Math.floor(progress * target);
 
       setActiveUsers(animatedValue);
@@ -78,7 +77,6 @@ function Hero() {
       animate="visible"
       variants={containerVariants}
     >
-      {/* Gradient Background (Transparent in Light Mode, Visible in Dark Mode) */}
       <div
         className="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-primary via-background to-background dark:from-primary dark:via-background dark:to-background opacity-0 dark:opacity-20"
         aria-hidden="true"
@@ -87,7 +85,6 @@ function Hero() {
         className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-32 gap-8 lg:gap-12"
         variants={containerVariants}
       >
-        {/* Left Content */}
         <motion.div
           className="relative z-10 max-w-2xl text-left mt-80 sm:mt-96 md:mt-0 lg:mt-0 lg:flex-1 order-2 lg:order-1"
           variants={containerVariants}
@@ -118,16 +115,16 @@ function Hero() {
               className="bg-primary text-primary-foreground hover:bg-primary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48"
             >
               Get Started
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform"  />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button 
-            size="sm"
-            className="bg-secondary text-primary-foreground hover:bg-secondary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48">
+              size="sm"
+              className="bg-secondary text-primary-foreground hover:bg-secondary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48"
+            >
               Learn More
             </Button>
           </motion.div>
 
-          {/* Stats */}
           <motion.div
             className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8"
             variants={containerVariants}
@@ -136,7 +133,7 @@ function Hero() {
               {
                 value: `${activeUsers.toLocaleString()}+`,
                 label: "Active Users",
-              }, // Dynamic value
+              },
               { value: "50,000+", label: "Registered Shops" },
               { value: "20,000+", label: "Delivery Agents" },
             ].map((stat) => (
@@ -155,7 +152,6 @@ function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Right Side - Lottie Animation */}
         <motion.div
           className="flex justify-center md:justify-end items-center h-[400px] sm:h-[500px] lg:h-[600px] w-full lg:w-1/2 z-10 -mt-6 lg:mt-0 order-1 lg:order-2 absolute md:relative"
           variants={itemVariants}
