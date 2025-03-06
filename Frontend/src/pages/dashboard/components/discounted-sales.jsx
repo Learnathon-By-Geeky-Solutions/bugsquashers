@@ -43,10 +43,10 @@ export function DiscountedSales() {
         <div className="space-y-4">
           <div className="grid grid-cols-5 gap-2 text-xs">
             <div className="text-gray-500">$362</div>
-            <div className="text-gray-500">$357</div>
+            <div className="text-gray-500">$7</div>
             <div className="text-gray-500">$351</div>
             <div className="text-gray-500">$346</div>
-            <div className="text-gray-500">$340</div>
+            <div className="text-gray-500">$800</div>
           </div>
           <LineChart data={data} color="#3b82f6" />
         </div>
