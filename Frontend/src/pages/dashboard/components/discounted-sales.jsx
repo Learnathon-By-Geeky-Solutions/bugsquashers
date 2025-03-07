@@ -43,6 +43,7 @@ export function DiscountedSalesChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+<<<<<<< HEAD
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
@@ -73,6 +74,19 @@ export function DiscountedSalesChart() {
             />
           </AreaChart>
         </ChartContainer>
+=======
+        <div className="text-xs text-gray-500 mb-1">Total Discounted Sales this month</div>
+        <div className="space-y-4">
+          <div className="grid grid-cols-5 gap-2 text-xs">
+            <div className="text-gray-500">$362</div>
+            <div className="text-gray-500">$7</div>
+            <div className="text-gray-500">$351</div>
+            <div className="text-gray-500">$346</div>
+            <div className="text-gray-500">$800</div>
+          </div>
+          <LineChart data={data} color="#3b82f6" />
+        </div>
+>>>>>>> d07bb9dcaff2ebcdb59b5a388105e2f013feb992
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
