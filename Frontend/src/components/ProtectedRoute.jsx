@@ -3,20 +3,24 @@ import { useAuth } from "../pages/auth/Authcontext";
 import PropTypes from "prop-types";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user, userRole, loading } = useAuth();
+  const { user, userRole, loading, roleLoading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading indicator
+  // Show loading indicator if either authentication or role is still loading
+  if (loading || roleLoading) {
+    return <div>Loading...</div>;
   }
 
+  // Redirect to login if user is not authenticated
   if (!user) {
-    return <Navigate to="/login" replace />; // Redirect if not logged in
+    return <Navigate to="/login" replace />;
   }
 
+  // Redirect to 404 if user role is not allowed
   if (!allowedRoles.includes(userRole)) {
-    return <Navigate to="/404" replace />; // Redirect if role is unauthorized
+    return <Navigate to="/404" replace />;
   }
 
+  // Render the children if user is authenticated and role is allowed
   return children;
 };
 

@@ -1,33 +1,38 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
-import { Badge } from "../../../components/ui/badge"
+import { Star } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
 
 export function TodaysHeroes() {
-  const heroes = [
-    { id: 1, avatar: "/Hero1.webp?height=40&width=40" },
-    { id: 2, avatar: "/Hero1.webp?height=40&width=40" },
-    { id: 3, avatar: "/Hero1.webp?height=40&width=40" },
-    { id: 4, avatar: "/Hero1.webp?height=40&width=40" },
+  const topProducts = [
+    { name: "Wireless Earbuds", sales: 42 },
+    { name: "Smart Watch", sales: 38 },
+    { name: "Phone Case", sales: 27 },
   ]
 
   return (
-    <Card>
+    <Card className="border border-muted">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium">Today's Heroes</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">Today's Heroes</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-2">
-          {heroes.map((hero) => (
-            <img
-              key={hero.id}
-              src={hero.avatar || "/placeholder.svg"}
-              alt={`Hero ${hero.id}`}
-              className="h-10 w-10 rounded-full border-2 border-white"
-            />
+        <div className="space-y-3">
+          {topProducts.map((product, index) => (
+            <div key={index} className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={product.name} />
+                  <AvatarFallback>{product.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="text-sm font-medium">{product.name}</div>
+              </div>
+              <div className="flex items-center gap-1 text-sm">
+                <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                <span>{product.sales} sold</span>
+              </div>
+            </div>
           ))}
-          <Badge variant="outline" className="ml-1 bg-gray-100 text-gray-700">
-            +42
-          </Badge>
         </div>
+        <CardDescription className="mt-3 text-xs">Top selling products today</CardDescription>
       </CardContent>
     </Card>
   )

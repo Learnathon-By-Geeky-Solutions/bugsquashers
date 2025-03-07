@@ -4,7 +4,7 @@ import { Progress } from "../../../components/ui/progress"
 
 export function OrdersThisMonth() {
   return (
-    <Card>
+    <Card className="border border-muted">
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-bold">1,836</span>

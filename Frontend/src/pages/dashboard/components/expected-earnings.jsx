@@ -1,49 +1,126 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
-import { DonutChart } from "../../../components/charts/donut-chart"
-import { MoreHorizontal, TrendingUp } from "lucide-react"
-import { Button } from "../../../components/ui/button"
+"use client"
+
+import * as React from "react"
+import { TrendingUp } from "lucide-react"
+import { Label, Pie, PieChart } from "recharts"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "../../../components/ui/chart"
+
+const chartData = [
+  { product: "Product A", buyers: 275, fill: "hsl(var(--primary))" },
+  { product: "Product B", buyers: 200, fill: "hsl(var(--secondary))" },
+  { product: "Product C", buyers: 287, fill: "hsl(var(--primary))" },
+  { product: "Product D", buyers: 173, fill: "hsl(var(--accent))" },
+  { product: "Other", buyers: 190, fill: "hsl(var(--secondary))" },
+]
+
+const chartConfig = {
+  buyers: {
+    label: "Buyers",
+  },
+  productA: {
+    label: "Product A",
+    color: "hsl(var(--chart-1))",
+  },
+  productB: {
+    label: "Product B",
+    color: "hsl(var(--chart-2))",
+  },
+  productC: {
+    label: "Product C",
+    color: "hsl(var(--chart-3))",
+  },
+  productD: {
+    label: "Product D",
+    color: "hsl(var(--chart-4))",
+  },
+  other: {
+    label: "Other",
+    color: "hsl(var(--chart-5))",
+  },
+}
 
 export function ExpectedEarnings() {
-  const data = [
-    { name: "Egg", value: 57860, color: "#66D47E" },
-    { name: "Rice", value: 32820, color: "#FFD55A" },
-    { name: "Others", value: 25257, color: "#F4AF1B" },
-  ]
+  const totalBuyers = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.buyers, 0)
+  }, [])
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xl sm:text-2xl font-bold">$69,700</span>
-            <div className="flex items-center text-sm text-primary font-medium">
-              <TrendingUp className="h-3.5 w-3.5 mr-1" />
-              2.2%
-            </div>
-          </div>
-          <CardTitle className="text-sm font-medium text-gray-500">Expected Earnings</CardTitle>
-        </div>
-        <Button variant="ghost" size="icon" className="shrink-0">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
+    <Card className="flex flex-col border border-muted">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Expected Earnings - Buyers Distribution</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="w-full sm:w-1/2 max-w-[200px]">
-            <DonutChart data={data} />
-          </div>
-          <div className="w-full sm:w-1/2 flex flex-col justify-center gap-3">
-            {data.map((item) => (
-              <div key={item.name} className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-sm">{item.name}</span>
-                <span className="text-sm font-medium ml-auto">${(item.value / 1000).toFixed(1)}k</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      <CardContent className="flex-1 pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[250px]"
+        >
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie
+              data={chartData}
+              dataKey="buyers"
+              nameKey="product"
+              innerRadius={60}
+              strokeWidth={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {totalBuyers.toLocaleString()}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          Buyers
+                        </tspan>
+                      </text>
+                    )
+                  }
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
+        <div className="flex items-center gap-2 font-medium leading-none">
+          Trending up by 7.5% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="leading-none text-muted-foreground">
+          Showing expected earnings and buyers for the last 6 months
+        </div>
+      </CardFooter>
     </Card>
   )
 }
-

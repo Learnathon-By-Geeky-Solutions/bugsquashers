@@ -19,7 +19,7 @@ import Lottie from "react-lottie-player";
 import welcomeback from "./assets/savetime";
 import { useAuth } from "./AuthContext"; // Import useAuth
 import { setDoc, doc } from "firebase/firestore";
-
+import { toast } from "react-hot-toast";
 function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,19 +40,18 @@ function Signup() {
     const { fullName, email, password, confirmPassword, role } = formData;
 
     if (!fullName || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields", { position: "bottom-right" });
       setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match", { position: "bottom-right" });
       setIsLoading(false);
       return;
     }
 
     try {
-      // Step 1: Sign up the user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -60,36 +59,41 @@ function Signup() {
       );
       const user = userCredential.user;
 
-      // Step 2: Store user data in Firebase Firestore and Update AuthContext with the new user and role
       await setDoc(doc(db, "users", user.uid), {
         fullName,
         email,
         role,
         createdAt: new Date(),
       });
-      setUser(user); // Update user in AuthContext
-      setUserRole(role); // Update userRole in AuthContext
 
-      // Step 3: Send user data (including role) to the backend
+      setUser(user);
+      setUserRole(role);
+
       const response = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid: user.uid, fullName, email, role }), // Include role here
+        body: JSON.stringify({ uid: user.uid, fullName, email, role }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert("Account created successfully!");
-        navigate("/"); // Redirect to home page
+        toast.success("Account created successfully!", {
+          position: "bottom-right",
+        });
+        navigate("/");
       } else {
-        alert(data.message || "Error creating account");
+        toast.error(data.message || "Error creating account", {
+          position: "bottom-right",
+        });
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        alert("Email is already in use. Please use a different email.");
+        toast.error("Email is already in use. Please use a different email.", {
+          position: "bottom-right",
+        });
       } else {
         console.error("Error signing up:", error.message);
-        alert(error.message);
+        toast.error(error.message, { position: "bottom-right" });
       }
     } finally {
       setIsLoading(false);
@@ -251,15 +255,15 @@ function Signup() {
 
           {/* Social Login Buttons */}
           <div className="flex gap-2">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full bg-accent">
               <FcGoogle className="mr-2 h-4 w-4" />
               Google
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full bg-accent">
               <FaApple className="mr-2 h-4 w-4" />
               Apple
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full bg-accent">
               <FaFacebook className="mr-2 h-4 w-4" />
               Facebook
             </Button>

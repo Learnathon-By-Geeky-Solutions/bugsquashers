@@ -13,7 +13,8 @@ import DeliveryDash from "./pages/dashboard/DeliveryDash";
 import FarmerDash from "./pages/dashboard/FarmerDash";
 import NotFound from "./pages/NotFound";
 import Cart from "./pages/cart/Cart";
-
+import ProductDetail from "./pages/marketplace/ProductDetail";
+import { Toaster } from "react-hot-toast";
 const DashboardRedirect = () => {
   const { userRole } = useAuth();
 
@@ -35,7 +36,7 @@ const DashboardRedirect = () => {
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideNavPaths = ["/login", "/signup", "/404" ,"/retailer"];
+  const hideNavPaths = ["/login", "/signup", "/404"];
   const shouldShowNav = !hideNavPaths.includes(location.pathname);
 
   return (
@@ -53,12 +54,15 @@ Layout.propTypes = {
 
 const App = () => (
   <AuthProvider>
+    <Toaster  position="bottom-right" reverseOrder={false} />
     <Router>
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/productpage" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
           <Route
             path="/dashboard"
             element={

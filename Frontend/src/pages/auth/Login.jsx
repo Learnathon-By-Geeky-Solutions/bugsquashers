@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, Link } from "react-router-dom"; // Import useLocation
 import { useForm, FormProvider } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
@@ -13,13 +13,20 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
-import { auth } from "./Firebase";
 import Lottie from "react-lottie-player";
 import welcomeback from "./assets/welcomeback";
+import { toast } from "react-hot-toast";
+
+import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
+import { db,auth } from "./Firebase"; // Ensure Firebase Firestore is initialized
+
+
+
+
+
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location
   const formMethods = useForm();
   
   const { handleSubmit } = formMethods;
@@ -27,28 +34,54 @@ export function LoginForm() {
   async function onSubmit(data) {
     setIsLoading(true);
     const { email, password } = data;
-
+  
     if (!email || !password) {
-      alert("Please enter email and password");
+      toast.error("Please enter email and password");
       setIsLoading(false);
       return;
     }
-
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("User logged in:", userCredential.user);
-      alert("Login successful!");
-
-      // Redirect to the intended destination or home page
-      const intendedDestination = location.state?.from || "/";
-      navigate(intendedDestination);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Fetch user role from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+  
+      if (userDoc.exists()) {
+        const userRole = userDoc.data().role;
+  
+        toast.success("Login successful!");
+        console.log("User logged in:", user, "Role:", userRole);
+  
+        // Redirect to the appropriate dashboard
+        switch (userRole) {
+          case "Admin":
+            navigate("/admin");
+            break;
+          case "User":
+            navigate("/");
+            break;
+          case "Shopkeeper":
+            navigate("/");
+            break;
+          case "Deliveryman":
+            navigate("/deliverydash");
+            break;
+          case "Farmer":
+            navigate("/farmerdash");
+            break;
+          default:
+            navigate("/");
+            break;
+        }
+      } else {
+        toast.error("User role not found, please contact support.");
+        navigate("/");
+      }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Invalid email or password");
+      toast.error("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
@@ -135,15 +168,15 @@ export function LoginForm() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full bg-accent">
                 <FcGoogle className="mr-2 h-4 w-4" />
                 Google
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full bg-accent">
                 <FaApple className="mr-2 h-4 w-4" />
                 Apple
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full bg-accent">
                 <FaFacebook className="mr-2 h-4 w-4" />
                 Facebook
               </Button>

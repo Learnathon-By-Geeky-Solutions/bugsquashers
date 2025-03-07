@@ -1,101 +1,82 @@
 "use client"
-import { Bell, Moon ,Menu, Search, Sun } from "lucide-react"
 import { useState } from "react"
-import { Sidebar } from "./components/sidebar"
-import { DashboardHeader } from "./components/dashboard-header"
-import { ExpectedEarnings } from "./components/expected-earnings"
-import { AverageDailySales } from "./components/average-daily-sales"
-import { SalesThisMonth } from "./components/sales-this-month"
-import { OrdersThisMonth } from "./components/orders-this-month"
-import { NewCustomers } from "./components/new-customers"
-import { TodaysHeroes } from "./components/todays-heroes"
+import { BarChart3, Home, Package, Settings, Star } from "lucide-react"
 import { RecentOrders } from "./components/recent-orders"
-import { DiscountedSales } from "./components/discounted-sales"
 import { Button } from "../../components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet"
-
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarProvider,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "../../components/ui/sidebar"
+import Overview from "./components/Overview"
+import { ReviewsDashboard } from "./components/Review"
+import { StatisticsDashboard } from "./components/StatisticsDashboard"
 
 function RetailerDash() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [activeSection, setActiveSection] = useState("Overview") // Track active section
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode)
-    document.documentElement.classList.toggle("dark")
-  }
+  // Sidebar menu items with labels and corresponding component mapping
+  const menuItems = [
+    { label: "Overview", icon: Home, component: <Overview /> },
+    { label: "Reviews", icon: Star, component: <ReviewsDashboard /> },
+    { label: "Statistics", icon: BarChart3, component: <StatisticsDashboard /> },
+    { label: "Products", icon: Package, component: <RecentOrders /> },
+    { label: "Orders", icon: Settings, component: <RecentOrders /> },
+  ]
+
   return (
-    <div className={`min-h-screen flex ${isDarkMode ? "dark" : ""}`}>
-    {/* Desktop Sidebar */}
-    <div className="hidden lg:block">
-      <Sidebar />
-    </div>
+    <SidebarProvider>
+      <div className="min-h-screen flex mt-[68px] border-t border-muted">
+        {/* Desktop Sidebar */}
+        <Sidebar className="hidden md:flex border-r mt-[68px] border-t border-muted">
+          <SidebarContent className="p-4">
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    onClick={() => setActiveSection(item.label)}
+                    className={`w-full text-left px-4 py-2 rounded-md transition-all flex items-center gap-3 ${
+                      activeSection === item.label ? "bg-primary hover:bg-primary text-primary-foreground" : "hover:bg-muted"
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarContent>
+        </Sidebar>
 
-    {/* Mobile Sidebar */}
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden fixed left-4 top-4 z-50">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] p-0">
-        <Sidebar />
-      </SheetContent>
-    </Sheet>
-
-    <div className="flex-1 bg-background">
-      <header className="h-16 border-b bg-background dark:border-gray-700 flex items-center justify-between px-4 lg:px-6">
-        {/* Search - Hidden on mobile */}
-        <div className="hidden md:block w-72 relative">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full h-9 pl-8 pr-4 rounded-md bg-gray-100 dark:bg-gray-700 border-none focus:ring-2 focus:ring-blue-500"
-          />
+        {/* Mobile Top Navigation */}
+        <div className="md:hidden fixed pt-[68px] py-2 top-0 left-0 right-0 bg-background border border-b border-muted z-40">
+          <div className="flex overflow-x-auto p-2 space-x-2">
+            {menuItems.map((item) => (
+              <Button
+                key={item.label}
+                onClick={() => setActiveSection(item.label)}
+                variant={activeSection === item.label ? "default" : "outline"}
+                size="sm"
+                className="flex-shrink-0 text-foreground"
+              >
+                {item.label}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        {/* Mobile Search Button */}
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Search className="h-5 w-5" />
-        </Button>
-
-        <div className="flex items-center gap-2 md:gap-4">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full" onClick={toggleDarkMode}>
-            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+        {/* Main Content */}
+        <div className="flex-1 bg-background lg:w-[86vw] w-full mt-16 md:mt-0">
+          <main className="p-4 lg:p-6 space-y-6">
+            {/* Render selected component dynamically */}
+            {menuItems.find((item) => item.label === activeSection)?.component}
+          </main>
         </div>
-      </header>
-
-      <main className="p-4 lg:p-6 space-y-6">
-        <DashboardHeader />
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          <ExpectedEarnings />
-          <AverageDailySales />
-          <SalesThisMonth />
-        </div>
-
-        {/* Secondary Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          <OrdersThisMonth />
-          <NewCustomers />
-          <TodaysHeroes />
-        </div>
-
-        {/* Detailed Stats */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
-          <RecentOrders />
-          <DiscountedSales />
-        </div>
-      </main>
-    </div>
-  </div>
+      </div>
+    </SidebarProvider>
   )
 }
 
