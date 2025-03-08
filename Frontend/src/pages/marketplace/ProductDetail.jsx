@@ -1,19 +1,25 @@
-import React, { useState } from "react"
-import { ChevronLeft, ChevronRight, Star, ThumbsUp, MessageSquare, ShoppingCart } from 'lucide-react'
+import { useState } from "react";
+import PropTypes from 'prop-types';
+import { ChevronLeft, ChevronRight, Star, ThumbsUp, MessageSquare, ShoppingCart } from 'lucide-react';
 
-// Import shadcn components with correct paths for Vite
-// Note: You'll need to set up shadcn with Vite first
-import { Button } from "../../components/ui/button"
-import { Card, CardContent, CardFooter } from "../../components/ui/card"
-import { Input } from "../../components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
-import { Badge } from "../../components/ui/badge"
-import { Progress } from "../../components/ui/progress"
+// Import shadcn components
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter } from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
+import { Avatar, AvatarFallback } from "../../components/ui/avatar";
+import { Badge } from "../../components/ui/badge";
+import { Progress } from "../../components/ui/progress";
 
-// Product Review Component
 const ProductReview = ({ review }) => {
+  const renderStars = (rating) => 
+    [...Array(5)].map((_, i) => (
+      <Star 
+        key={i} 
+        className={`h-4 w-4 ${i < rating ? "fill-primary text-primary" : "fill-muted stroke-muted-foreground"}`} 
+      />
+    ));
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -27,14 +33,7 @@ const ProductReview = ({ review }) => {
               <div className="text-xs text-muted-foreground">{review.date}</div>
             </div>
           </div>
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i} 
-                className={`h-4 w-4 ${i < review.rating ? "fill-primary text-primary" : "fill-muted stroke-muted-foreground"}`} 
-              />
-            ))}
-          </div>
+          <div className="flex">{renderStars(review.rating)}</div>
         </div>
         <h3 className="font-semibold mb-2">{review.title}</h3>
         <p className="text-muted-foreground text-sm">{review.content}</p>
@@ -53,15 +52,35 @@ const ProductReview = ({ review }) => {
   );
 };
 
-// Suggested Product Card Component
+ProductReview.propTypes = {
+  review: PropTypes.shape({
+    authorInitials: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    helpfulCount: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
 const ProductCard = ({ product }) => {
+  const renderStars = (rating) =>
+    [...Array(5)].map((_, i) => (
+      <Star
+        key={i}
+        className={`h-3 w-3 ${i < rating ? "fill-primary text-primary" : "fill-muted stroke-muted-foreground"}`}
+      />
+    ));
+
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-square">
         <img 
-          src={product.image || "/placeholder.svg"} 
+          src={product.image} 
           alt={product.name} 
           className="object-cover w-full h-full"
+          loading="lazy"
         />
         {product.badge && (
           <Badge className={`absolute top-2 left-2 ${product.badge === 'Sale' ? 'bg-red-500' : 'bg-primary'}`}>
@@ -82,14 +101,7 @@ const ProductCard = ({ product }) => {
               <>${product.price}</>
             )}
           </div>
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i} 
-                className={`h-3 w-3 ${i < product.rating ? "fill-primary text-primary" : "fill-muted stroke-muted-foreground"}`} 
-              />
-            ))}
-          </div>
+          <div className="flex">{renderStars(product.rating)}</div>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
@@ -107,12 +119,21 @@ const ProductCard = ({ product }) => {
   );
 };
 
-// Main Product Detail Component
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    badge: PropTypes.string,
+    salePrice: PropTypes.string,
+    price: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState("red");
   
-  // Sample data
   const reviews = [
     {
       author: "John Doe",
@@ -173,7 +194,7 @@ const ProductDetail = () => {
   };
   
   const handleQuantityChange = (e) => {
-    setQuantity(parseInt(e.target.value) || 1);
+    setQuantity(Math.max(1, parseInt(e.target.value) || 1));
   };
   
   const handleVariantChange = (value) => {
@@ -204,6 +225,7 @@ const ProductDetail = () => {
                 src="https://placehold.co/600x600?text=Organic+Apples" 
                 alt="Organic Apples" 
                 className="object-cover w-full h-full"
+                loading="lazy"
               />
               <Button 
                 variant="outline" 
@@ -265,20 +287,6 @@ const ProductDetail = () => {
           </ul>
 
           <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-1 block">Variant:</label>
-              <Select onValueChange={handleVariantChange} defaultValue={selectedVariant}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="red">Red Apples</SelectItem>
-                  <SelectItem value="green">Green Apples</SelectItem>
-                  <SelectItem value="yellow">Yellow Apples</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <div>
               <label className="text-sm font-medium mb-1 block">Variant:</label>
               <Tabs 
@@ -350,7 +358,7 @@ const ProductDetail = () => {
           </TabsContent>
           <TabsContent value="returns" className="mt-4">
             <p className="text-muted-foreground">
-              If you're not satisfied with your purchase, you can return it within 30 days
+              If you&apos;re not satisfied with your purchase, you can return it within 30 days
               for a full refund. Simply contact our customer service for assistance. Your
               satisfaction is our priority!
             </p>

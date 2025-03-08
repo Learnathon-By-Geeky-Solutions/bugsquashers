@@ -1,18 +1,18 @@
-import { Star } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
+import { Star } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 
 export function TodaysHeroes() {
   const topProducts = [
     { name: "Wireless Earbuds", sales: 42 },
     { name: "Smart Watch", sales: 38 },
     { name: "Phone Case", sales: 27 },
-  ]
+  ];
 
   return (
     <Card className="border border-muted">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">Today's Heroes</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">Today&apos;s Heroes</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -35,6 +35,5 @@ export function TodaysHeroes() {
         <CardDescription className="mt-3 text-xs">Top selling products today</CardDescription>
       </CardContent>
     </Card>
-  )
+  );
 }
-

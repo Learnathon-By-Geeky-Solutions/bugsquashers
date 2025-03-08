@@ -73,7 +73,7 @@ const Index = () => {
               Why Choose FairBasket?
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl">
-              We're revolutionizing the grocery supply chain with technology
+              We’re revolutionizing the grocery supply chain with technology
               that benefits everyone.
             </p>
           </div>
@@ -238,7 +238,6 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      {/* Testimonials Section */}
       <div className="flex flex-col items-center py-16">
         <Badge
           variant="outline"
@@ -250,7 +249,7 @@ const Index = () => {
           What Our Customers Say
         </h2>
         <p className="text-muted-foreground text-center max-w-2xl">
-          Don't just take our word for it - hear from the people who use
+          Don’t just take our word for it - hear from the people who use
           FAIRBASKET every day.
         </p>
       </div>
@@ -272,7 +271,6 @@ const Index = () => {
         <div className="absolute inset-0 bg-background opacity-70"></div>
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto bg-card rounded-2xl p-12 shadow-xl border border-border relative overflow-hidden">
-            
             <div className="relative">
               <h2 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-4">
                 Join FairBasket Today

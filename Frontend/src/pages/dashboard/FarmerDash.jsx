@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import PropTypes from 'prop-types'; // Added import for PropTypes
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table"
 import { Button } from "../../components/ui/button"
@@ -186,6 +187,16 @@ function StatCard({ title, value, description, icon, trend, trendDirection }) {
   )
 }
 
+// Added PropTypes for StatCard
+StatCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
+  trend: PropTypes.string.isRequired,
+  trendDirection: PropTypes.oneOf(['up', 'down', 'neutral']).isRequired,
+};
+
 // OrdersDashboard Component
 function OrdersDashboard() {
   const [orders, setOrders] = useState([])
@@ -198,7 +209,7 @@ function OrdersDashboard() {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000))
       setOrders(demoOrders) // Use demo data
-    } catch (err) {
+    } catch {
       setError("Failed to fetch orders. Please try again.")
     } finally {
       setLoading(false)
@@ -308,7 +319,7 @@ function CropsDashboard() {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000))
       setCrops(demoCrops) // Use demo data
-    } catch (err) {
+    } catch {
       setError("Failed to fetch crops. Please try again.")
     } finally {
       setLoading(false)
@@ -526,7 +537,7 @@ function StatisticsDashboard() {
               <Users className="h-16 w-16 mx-auto text-muted-foreground" />
               <p className="mt-4 text-lg font-medium">Customer data visualization coming soon</p>
               <p className="text-sm text-muted-foreground mt-1">
-                We're working on gathering more detailed customer insights for you.
+                We&apos;re working on gathering more detailed customer insights for you.
               </p>
             </div>
           </div>
@@ -535,4 +546,3 @@ function StatisticsDashboard() {
     </div>
   )
 }
-

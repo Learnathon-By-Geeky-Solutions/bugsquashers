@@ -1,7 +1,8 @@
-import { ArrowRight, BarChart3, LineChart, PieChart, TrendingUp, DollarSign, ShoppingBag, Users } from "lucide-react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card"
-import { Button } from "../../../components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import { ArrowRight, BarChart3, LineChart, PieChart, TrendingUp, DollarSign, ShoppingBag, Users } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
+import PropTypes from 'prop-types';
 
 export function StatisticsDashboard() {
   return (
@@ -122,7 +123,7 @@ export function StatisticsDashboard() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
 // Helper Components
@@ -141,8 +142,17 @@ function StatCard({ title, value, change, trend, description, icon }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
+
+StatCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  change: PropTypes.string.isRequired,
+  trend: PropTypes.oneOf(['up', 'down']).isRequired,
+  description: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
+};
 
 function SalesChart() {
   return (
@@ -164,7 +174,7 @@ function SalesChart() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function TopProducts() {
@@ -174,7 +184,7 @@ function TopProducts() {
     { name: "Bluetooth Speaker", sales: 765, growth: "+8.4%" },
     { name: "Phone Case", sales: 654, growth: "+5.2%" },
     { name: "Laptop Sleeve", sales: 543, growth: "+3.7%" },
-  ]
+  ];
 
   return (
     <Card className="col-span-1">
@@ -202,7 +212,7 @@ function TopProducts() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function CustomerAcquisition() {
@@ -225,7 +235,7 @@ function CustomerAcquisition() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function SalesByCategory() {
@@ -248,5 +258,5 @@ function SalesByCategory() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
