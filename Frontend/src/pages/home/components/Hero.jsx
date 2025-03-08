@@ -102,7 +102,7 @@ function Hero() {
             className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground hidden md:flex"
             variants={itemVariants}
           >
-            Use AI-driven scanning to identify products, compare today's prices,
+            Use AI-driven scanning to identify products, compare today’s prices,
             get retailer insights, and ensure fast delivery while saving money.
           </motion.p>
 
@@ -117,7 +117,7 @@ function Hero() {
               Get Started
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button 
+            <Button
               size="sm"
               className="bg-secondary text-primary-foreground hover:bg-secondary-hover px-8 py-6 text-lg group rounded-full w-full md:w-48"
             >

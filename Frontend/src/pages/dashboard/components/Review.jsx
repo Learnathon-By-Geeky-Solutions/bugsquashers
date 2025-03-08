@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'; // Added import for PropTypes
 import { ArrowRight, MessageSquare, Star, ThumbsDown, ThumbsUp } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Button } from "../../../components/ui/button"
@@ -217,6 +218,27 @@ function ReviewsList({ reviews }) {
   )
 }
 
+// PropTypes validation for ReviewsList
+ReviewsList.propTypes = {
+  reviews: PropTypes.arrayOf(
+    PropTypes.shape({
+      customer: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        initials: PropTypes.string.isRequired,
+      }).isRequired,
+      rating: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      productVerified: PropTypes.bool.isRequired,
+      helpfulCount: PropTypes.number.isRequired,
+      replied: PropTypes.bool.isRequired,
+      reply: PropTypes.string, // Optional
+      replyDate: PropTypes.string, // Optional
+    })
+  ).isRequired,
+};
+
 // Sample review data
 const allReviews = [
   {
@@ -284,4 +306,3 @@ const allReviews = [
     replyDate: "April 23, 2023",
   },
 ]
-

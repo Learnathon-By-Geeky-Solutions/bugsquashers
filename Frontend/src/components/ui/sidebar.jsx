@@ -1,5 +1,5 @@
 import * as React from "react";
-import PropTypes from "prop-types"; // Added for prop validation
+import PropTypes from "prop-types";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
@@ -24,22 +24,18 @@ import {
   TooltipTrigger,
 } from "./tooltip";
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state";
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_MOBILE = "18rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
-const SIDEBAR_KEYBOARD_SHORTCUT = "b";
+// Import constants and hook from sidebar-utils
+import {
+  SIDEBAR_COOKIE_NAME,
+  SIDEBAR_COOKIE_MAX_AGE,
+  SIDEBAR_WIDTH,
+  SIDEBAR_WIDTH_MOBILE,
+  SIDEBAR_WIDTH_ICON,
+  SIDEBAR_KEYBOARD_SHORTCUT,
+  useSidebar,
+} from "./sidebar-utils";
 
 const SidebarContext = React.createContext(null);
-
-function useSidebar() {
-  const context = React.useContext(SidebarContext);
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider.");
-  }
-  return context;
-}
 
 const SidebarProvider = React.forwardRef(
   (
@@ -606,8 +602,7 @@ SidebarMenuButton.propTypes = {
 SidebarMenuButton.displayName = "SidebarMenuButton";
 
 const SidebarMenuAction = React.forwardRef(
-  ({ className, asChild = false, showOnHover = false, ...props }, ref
-  ) => {
+  ({ className, asChild = false, showOnHover = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
 
     return (
@@ -751,6 +746,7 @@ SidebarMenuSubButton.propTypes = {
 
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton";
 
+// Export only components
 export {
   Sidebar,
   SidebarContent,
@@ -775,5 +771,4 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar,
 };
