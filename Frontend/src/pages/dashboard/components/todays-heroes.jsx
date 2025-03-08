@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avat
 
 export function TodaysHeroes() {
   const topProducts = [
-    { name: "Wireless Earbuds", sales: 42 },
-    { name: "Smart Watch", sales: 38 },
-    { name: "Phone Case", sales: 27 },
+    { id: "earbuds", name: "Wireless Earbuds", sales: 42 },
+    { id: "watch", name: "Smart Watch", sales: 38 },
+    { id: "case", name: "Phone Case", sales: 27 },
   ];
 
   return (
@@ -16,8 +16,8 @@ export function TodaysHeroes() {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {topProducts.map((product, index) => (
-            <div key={index} className="flex items-center justify-between">
+          {topProducts.map((product) => (
+            <div key={product.id} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={product.name} />

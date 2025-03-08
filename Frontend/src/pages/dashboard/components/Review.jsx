@@ -134,8 +134,8 @@ function ReviewTrendsCard() {
 function ReviewsList({ reviews }) {
   return (
     <div className="space-y-4">
-      {reviews.map((review, index) => (
-        <Card key={index}>
+      {reviews.map((review) => (
+        <Card key={review.id}>
           <CardContent className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
               <Avatar className="h-10 w-10 hidden sm:block">
@@ -215,8 +215,9 @@ function ReviewsList({ reviews }) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
+
 
 // PropTypes validation for ReviewsList
 ReviewsList.propTypes = {

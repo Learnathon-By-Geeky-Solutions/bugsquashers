@@ -179,11 +179,11 @@ function SalesChart() {
 
 function TopProducts() {
   const products = [
-    { name: "Wireless Earbuds", sales: 1245, growth: "+12.3%" },
-    { name: "Smart Watch", sales: 986, growth: "+10.8%" },
-    { name: "Bluetooth Speaker", sales: 765, growth: "+8.4%" },
-    { name: "Phone Case", sales: 654, growth: "+5.2%" },
-    { name: "Laptop Sleeve", sales: 543, growth: "+3.7%" },
+    { id: "earbuds", name: "Wireless Earbuds", sales: 1245, growth: "+12.3%" },
+    { id: "watch", name: "Smart Watch", sales: 986, growth: "+10.8%" },
+    { id: "speaker", name: "Bluetooth Speaker", sales: 765, growth: "+8.4%" },
+    { id: "case", name: "Phone Case", sales: 654, growth: "+5.2%" },
+    { id: "sleeve", name: "Laptop Sleeve", sales: 543, growth: "+3.7%" },
   ];
 
   return (
@@ -194,8 +194,8 @@ function TopProducts() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {products.map((product, i) => (
-            <div key={i} className="flex items-center justify-between">
+          {products.map((product) => (
+            <div key={product.id} className="flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">{product.name}</p>
                 <p className="text-sm text-muted-foreground">{product.sales} units sold</p>
@@ -214,6 +214,7 @@ function TopProducts() {
     </Card>
   );
 }
+
 
 function CustomerAcquisition() {
   return (

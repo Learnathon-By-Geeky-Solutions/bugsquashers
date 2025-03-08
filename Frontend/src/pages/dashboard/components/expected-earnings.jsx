@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -11,12 +11,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card"
+} from "../../../components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "../../../components/ui/chart"
+} from "../../../components/ui/chart";
 
 const chartData = [
   { product: "Product A", buyers: 275, fill: "hsl(var(--primary))" },
@@ -24,7 +24,7 @@ const chartData = [
   { product: "Product C", buyers: 287, fill: "hsl(var(--primary))" },
   { product: "Product D", buyers: 173, fill: "hsl(var(--accent))" },
   { product: "Other", buyers: 190, fill: "hsl(var(--secondary))" },
-]
+];
 
 const chartConfig = {
   buyers: {
@@ -50,12 +50,42 @@ const chartConfig = {
     label: "Other",
     color: "hsl(var(--chart-5))",
   },
-}
+};
+
+// Move the Label content function outside the component
+const renderLabelContent = ({ viewBox, totalBuyers }) => {
+  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+    return (
+      <text
+        x={viewBox.cx}
+        y={viewBox.cy}
+        textAnchor="middle"
+        dominantBaseline="middle"
+      >
+        <tspan
+          x={viewBox.cx}
+          y={viewBox.cy}
+          className="fill-foreground text-3xl font-bold"
+        >
+          {totalBuyers.toLocaleString()}
+        </tspan>
+        <tspan
+          x={viewBox.cx}
+          y={(viewBox.cy || 0) + 24}
+          className="fill-muted-foreground"
+        >
+          Buyers
+        </tspan>
+      </text>
+    );
+  }
+  return null;
+};
 
 export function ExpectedEarnings() {
   const totalBuyers = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.buyers, 0)
-  }, [])
+    return chartData.reduce((acc, curr) => acc + curr.buyers, 0);
+  }, []);
 
   return (
     <Card className="flex flex-col border border-muted">
@@ -81,33 +111,7 @@ export function ExpectedEarnings() {
               strokeWidth={5}
             >
               <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {totalBuyers.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Buyers
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
+                content={(props) => renderLabelContent({ ...props, totalBuyers })}
               />
             </Pie>
           </PieChart>
@@ -122,5 +126,5 @@ export function ExpectedEarnings() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

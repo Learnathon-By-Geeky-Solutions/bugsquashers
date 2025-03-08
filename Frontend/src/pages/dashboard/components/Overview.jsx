@@ -36,25 +36,25 @@ const demoStats = {
 
 // StatCard Component
 function StatCard({ title, value, description, icon, trend, trendDirection }) {
+  let trendClass = "text-gray-500";
+  let trendIcon = null;
+
+  if (trendDirection === "up") {
+    trendClass = "text-green-500";
+    trendIcon = <TrendingUp className="ml-1 h-3 w-3" />;
+  } else if (trendDirection === "down") {
+    trendClass = "text-red-500";
+    trendIcon = <TrendingUp className="ml-1 h-3 w-3 rotate-180" />;
+  }
+
   return (
     <Card>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="rounded-full bg-muted p-2">{icon}</div>
-          <div
-            className={`text-sm font-medium flex items-center ${
-              trendDirection === "up"
-                ? "text-green-500"
-                : trendDirection === "down"
-                ? "text-red-500"
-                : "text-gray-500"
-            }`}
-          >
+          <div className={`text-sm font-medium flex items-center ${trendClass}`}>
             {trend}
-            {trendDirection === "up" && <TrendingUp className="ml-1 h-3 w-3" />}
-            {trendDirection === "down" && (
-              <TrendingUp className="ml-1 h-3 w-3 rotate-180" />
-            )}
+            {trendIcon}
           </div>
         </div>
         <div className="mt-4">
@@ -66,6 +66,7 @@ function StatCard({ title, value, description, icon, trend, trendDirection }) {
     </Card>
   );
 }
+
 
 StatCard.propTypes = {
   title: PropTypes.string.isRequired,

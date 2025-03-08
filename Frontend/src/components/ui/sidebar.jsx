@@ -35,7 +35,8 @@ import {
   useSidebar,
 } from "./sidebar-utils";
 
-const SidebarContext = React.createContext(null);
+// Export SidebarContext
+export const SidebarContext = React.createContext(null);
 
 const SidebarProvider = React.forwardRef(
   (
@@ -138,6 +139,7 @@ SidebarProvider.propTypes = {
 };
 
 SidebarProvider.displayName = "SidebarProvider";
+
 
 const Sidebar = React.forwardRef(
   (
