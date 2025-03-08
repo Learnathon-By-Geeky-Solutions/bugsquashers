@@ -660,8 +660,11 @@ SidebarMenuBadge.propTypes = {
 SidebarMenuBadge.displayName = "SidebarMenuBadge";
 
 const SidebarMenuSkeleton = React.forwardRef(({ className, showIcon = false, ...props }, ref) => {
+  // Generate a secure random number for width percentage
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
+    const randomValue = new Uint8Array(1);
+    window.crypto.getRandomValues(randomValue);
+    return `${Math.floor((randomValue[0] / 255) * 40) + 50}%`; // Map the value to the desired range (50%-90%)
   }, []);
 
   return (
@@ -682,6 +685,7 @@ const SidebarMenuSkeleton = React.forwardRef(({ className, showIcon = false, ...
     </div>
   );
 });
+
 
 SidebarMenuSkeleton.propTypes = {
   className: PropTypes.string,
