@@ -66,7 +66,7 @@ const Cart = () => {
           <div className="flex flex-col items-center justify-center py-12">
             <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
-            <p className="text-muted-foreground mb-6">Looks like you haven't added anything to your cart yet.</p>
+            <p className="text-muted-foreground mb-6">Looks like you haven&apos;t added anything to your cart yet.</p>
             <Button onClick={() => window.history.back()}>Continue Shopping</Button>
           </div>
         </Card>
@@ -243,4 +243,3 @@ const Cart = () => {
 }
 
 export default Cart
-
