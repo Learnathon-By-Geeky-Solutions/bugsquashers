@@ -1,61 +1,138 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { Trash2, ShoppingBag, CreditCard, ArrowLeft, Plus, Minus } from "lucide-react"
+import React, { useState, useEffect } from "react";
+import { Trash2, ShoppingBag, CreditCard, ArrowLeft, Plus, Minus } from "lucide-react";
 
 // Import shadcn components
-import { Button } from "../../components/ui/button"
-import { Card, CardContent, CardFooter } from "../../components/ui/card"
-import { Input } from "../../components/ui/input"
-import { Separator } from "../../components/ui/separator"
-import { Badge } from "../../components/ui/badge"
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardFooter } from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Separator } from "../../components/ui/separator";
+import { Badge } from "../../components/ui/badge";
 
 const Cart = () => {
-  // Sample cart items
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Organic Apples",
-      variant: "Red Apples",
-      price: 3.0,
-      quantity: 2,
-      image: "https://placehold.co/100x100?text=Apples",
-    },
-    {
-      id: 2,
-      name: "Organic Bananas",
-      variant: "Ripe",
-      price: 2.5,
-      quantity: 1,
-      image: "https://placehold.co/100x100?text=Bananas",
-    },
-    {
-      id: 3,
-      name: "Organic Strawberries",
-      variant: "Fresh Pack",
-      price: 3.99,
-      quantity: 3,
-      image: "https://placehold.co/100x100?text=Strawberries",
-    },
-  ])
+  const [cartItems, setCartItems] = useState([]);
+  const userId = localStorage.getItem("userId"); // Get the user ID from localStorage
 
-  // Calculate totals
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
-  const shipping = subtotal > 35 ? 0 : 5.99
-  const tax = subtotal * 0.08 // 8% tax rate
-  const total = subtotal + shipping + tax
+  // Fetch cart items from the backend when the component mounts
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Get the token from localStorage
+        if (!token) {
+          console.error("No token found. User is not authenticated.");
+          return;
+        }
+
+        const response = await fetch(`/api/cart/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch cart");
+        }
+
+        const data = await response.json();
+        if (data.cart) {
+          setCartItems(data.cart.items); // Update the cart items state
+        }
+      } catch (error) {
+        console.error("❌ Error fetching cart:", error);
+      }
+    };
+
+    if (userId) {
+      fetchCart(); // Call the fetchCart function
+    }
+  }, [userId]); // Dependency array ensures this runs when userId changes
 
   // Handle quantity change
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return
+  const updateQuantity = async (id, newQuantity) => {
+    if (newQuantity < 1) return;
 
-    setCartItems(cartItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)))
-  }
+    try {
+      const token = localStorage.getItem("token"); // Get the token from localStorage
+      const response = await fetch("/api/cart/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+        },
+        body: JSON.stringify({ userId, productId: id, quantity: newQuantity }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update quantity");
+      }
+
+      const data = await response.json();
+      if (data.cart) {
+        setCartItems(data.cart.items); // Update the cart items state
+      }
+    } catch (error) {
+      console.error("❌ Error updating quantity:", error);
+    }
+  };
 
   // Handle remove item
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
-  }
+  const removeItem = async (id) => {
+    try {
+      const token = localStorage.getItem("token"); // Get the token from localStorage
+      const response = await fetch("/api/cart/remove", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+        },
+        body: JSON.stringify({ userId, productId: id }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to remove item");
+      }
+
+      const data = await response.json();
+      if (data.cart) {
+        setCartItems(data.cart.items); // Update the cart items state
+      }
+    } catch (error) {
+      console.error("❌ Error removing item:", error);
+    }
+  };
+
+  // Handle clear cart
+  const clearCart = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Get the token from localStorage
+      const response = await fetch("/api/cart/clear", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to clear cart");
+      }
+
+      const data = await response.json();
+      if (data.cart) {
+        setCartItems(data.cart.items); // Update the cart items state
+      }
+    } catch (error) {
+      console.error("❌ Error clearing cart:", error);
+    }
+  };
+
+  // Calculate totals
+  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const shipping = subtotal > 35 ? 0 : 5.99;
+  const tax = subtotal * 0.08; // 8% tax rate
+  const total = subtotal + shipping + tax;
 
   // Empty cart view
   if (cartItems.length === 0) {
@@ -71,7 +148,7 @@ const Cart = () => {
           </div>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -89,7 +166,7 @@ const Cart = () => {
           <Card>
             <CardContent className="p-6">
               {cartItems.map((item, index) => (
-                <React.Fragment key={item.id}>
+                <React.Fragment key={item._id}>
                   <div className="flex flex-col sm:flex-row gap-4">
                     {/* Product Image */}
                     <div className="flex-shrink-0">
@@ -120,7 +197,7 @@ const Cart = () => {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="h-3 w-3" />
@@ -130,7 +207,7 @@ const Cart = () => {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
@@ -141,7 +218,7 @@ const Cart = () => {
                           variant="ghost"
                           size="sm"
                           className="text-muted-foreground"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.productId)}
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Remove
@@ -159,7 +236,7 @@ const Cart = () => {
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Continue Shopping
               </Button>
-              <Button variant="outline" onClick={() => setCartItems([])}>
+              <Button variant="outline" onClick={clearCart}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear Cart
               </Button>
@@ -239,7 +316,7 @@ const Cart = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
