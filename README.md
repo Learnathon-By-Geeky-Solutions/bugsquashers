@@ -226,3 +226,4 @@ See LICENSE for more information.
 Email: bugsquashers@fairbasket.com
 
 GitHub Issues: Report a bug or request a feature
+RAG pipeline 
